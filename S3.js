@@ -9,26 +9,6 @@ AWS.config.update({
     signatureVersion: 'v4'
 });
 
-/**
- * Bucket object policy
- * Политика bucket объекта
- */
-
-const bucketPolicy = {
-    Bucket: 'mbox-userstorage',
-    Policy: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-            {
-                Effect: 'Allow',
-                Principal: '*',
-                Action: 's3:GetObject',
-                Resource: `arn:aws:s3:::mbox-userstorage/*`
-            }
-        ]
-    })
-};
-
 const s3 = new AWS.S3();
 
 /**
@@ -51,7 +31,25 @@ const bucketPolicy = {
     })
 };
 
-const s3 = new AWS.S3();
+/**
+ * Bucket object policy
+ * Политика bucket объекта
+ */
+
+const bucketPolicy = {
+    Bucket: 'mbox-userstorage',
+    Policy: JSON.stringify({
+        Version: '2012-10-17',
+        Statement: [
+            {
+                Effect: 'Allow',
+                Principal: '*',
+                Action: 's3:GetObject',
+                Resource: `arn:aws:s3:::mbox-userstorage/*`
+            }
+        ]
+    })
+};
 
 /**
  * Set bucket object policy
