@@ -32,26 +32,6 @@ const bucketPolicy = {
 };
 
 /**
- * Bucket object policy
- * Политика bucket объекта
- */
-
-const bucketPolicy = {
-    Bucket: 'mbox-userstorage',
-    Policy: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-            {
-                Effect: 'Allow',
-                Principal: '*',
-                Action: 's3:GetObject',
-                Resource: `arn:aws:s3:::mbox-userstorage/*`
-            }
-        ]
-    })
-};
-
-/**
  * Set bucket object policy
  * Установка политики для Bucket объекта
  */
