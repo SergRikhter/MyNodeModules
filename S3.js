@@ -47,50 +47,54 @@ const setPolicy = async () =>{
     });
 }
 
+let file = {};
+
 /**
+ * Генерация объекта файла для загрузки в S3
  * Generating a file object for S3 storage
- * @param {*} filename 
- * @returns 
+ * @param {string} filename - имя файла
+ * @param {string} folder - папка в S3
+ * @param {string} options - тип файла (текст, изображение, музыка)
+ * @returns {Object|false} - объект файла для загрузки или false в случае ошибки
  */
-const selectFile = async (filename, folder,options) =>{
-    if(filename)
-    {
-        switch(options)
-        {
-           case "text":
-            file={
-                Body : await fs.readFileSync(filename),
-                Bucket: "mbox-userstorage",
-                Key:filename === undefined ?  undefined : folder+"/"+filename
-            }
-            break;
-            case "image":
-            file={
-                Body : await fs.createReadStream(filename),
-                Bucket: "mbox-userstorage",
-                Key:filename === undefined ?  undefined : folder+"/"+filename,
-                ContentType: 'image/jpeg'
-            }
-            break;  
-            case "music":
-                /*
-            file={
-                Body : await fs.createReadStream(filename),
-                Bucket: "mbox-userstorage",
-                Key:filename === undefined ?  undefined : folder+"/"+filename
-            }*/
-            break;
-            default:
-                return "Error! Incorrect filetype";
-            break;
-        }
-       
-        return file;
-    }else{
-          console.error(" select File:: File is missing");
+const selectFile = async (filename, folder, options) => {
+    if (!filename) {
+        console.error("selectFile :: Файл не найден");
         return false;
     }
-}
+
+    const filePath = path.join(folder, filename);  // Используем путь для упрощения
+
+    switch (options) {
+        case "text":
+            return {
+                Body: await fs.promises.readFile(filename),
+                Bucket: "mbox-userstorage",
+                Key: filePath
+            };
+        
+        case "image":
+            return {
+                Body: fs.createReadStream(filename),
+                Bucket: "mbox-userstorage",
+                Key: filePath,
+                ContentType: 'image/jpeg'
+            };
+
+        case "music":
+            // Пример для музыки, если файл был бы реализован
+            return {
+                Body: fs.createReadStream(filename),
+                Bucket: "mbox-userstorage",
+                Key: filePath,
+                ContentType: 'audio/mp3'
+            };
+
+        default:
+            console.error("selectFile :: Неверный тип файла");
+            return false;
+    }
+};
 
 /**
  * Create new bucket
